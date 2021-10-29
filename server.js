@@ -23,14 +23,12 @@ const run = async () => {
    try {
       await client.connect();
       console.log('Database connected!');
+
       const database = client.db('shomexDB');
       const serviceCollection = database.collection('services');
 
-      const result = await serviceCollection.insertOne({
-         name: 'Shomex',
-         age: 'newborn',
-      });
-      console.log(result.insertedId);
+      
+  
    } catch (error) {
       console.log(error.message);
    } finally {
