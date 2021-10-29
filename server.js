@@ -26,9 +26,6 @@ const run = async () => {
 
       const database = client.db('shomexDB');
       const serviceCollection = database.collection('services');
-
-      
-  
    } catch (error) {
       console.log(error.message);
    } finally {
@@ -39,7 +36,7 @@ const run = async () => {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-   res.send('<h1>Hello From Shomex Server!</h1>');
+   res.send('<h1>Shomex server is up and running!</h1>');
 });
 
 app.listen(PORT, () => {
