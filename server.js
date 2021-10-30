@@ -26,29 +26,79 @@ const run = async () => {
 
       const database = client.db('shomexDB');
       const serviceCollection = database.collection('services');
+      const ordersCollection = database.collection('orders');
 
       //* APis
 
       //@ GET all the services
-      app.get('/services', async (req,res) => {
+      app.get('/services', async (req, res) => {
          const cursor = serviceCollection.find({});
          const result = await cursor.toArray();
 
          res.json(result);
-      })
+      });
 
       //@ GET a single service by _id
-      app.get('/service/:id', async (req,res) => {
+      app.get('/service/:id', async (req, res) => {
          const { id } = req.params;
          console.log(id);
-         const result = await serviceCollection.findOne({_id: ObjectId(id)});
+         const result = await serviceCollection.findOne({ _id: ObjectId(id) });
 
          // res.json(result);
+         res.json(result);
+      });
+
+      //@ POST an order
+      app.post('/order', async (req, res) => {
+         const orderDetails = req.body;
+
+         const result = await ordersCollection.insertOne(orderDetails);
+         // res.json(result);
+         res.json(result);
+      });
+
+      //@ GET all personalized orders
+      app.get('/myOrders/:userEmail', async (req, res) => {
+         const { userEmail } = req.params;
+         console.log(userEmail);
+
+         const cursor = ordersCollection.find({ userEmail: userEmail });
+         const result = await cursor.toArray();
+
+         res.json(result);
+      });
+
+      //@ GET all orders
+      app.get('/allOrders', async (req, res) => {
+         const cursor = ordersCollection.find({});
+         const result = await cursor.toArray();
+
+         res.json(result);
+      });
+
+      //@ POST a single service
+      app.post('/addService', async (req, res) => {
+         const newService = req.body;
+         console.log(newService);
+         const result = await serviceCollection.insertOne(newService);
+
+         res.json(result);
+      });
+
+      app.put('/approve/:id', async (req, res) => {
+         const { id } = req.params;
+         console.log(id);
+         const result = await ordersCollection.updateOne({_id: ObjectId(id)}, {$set: {orderStatus: 'approved'}}, {upsert: true});
          res.json(result)
       })
 
+      app.delete('/deleteOrder/:id', async (req, res) => {
+         const { id } = req.params;
+         console.log(id);
+         const result = await ordersCollection.deleteOne({ _id: ObjectId(id) });
 
-
+         res.json(result);
+      });
    } catch (error) {
       console.log(error.message);
    } finally {
@@ -65,7 +115,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
    console.log(`Shomex server is running on port ${PORT}`);
 });
-
 
 //  ----------------------------------------------------------------
 /* 
