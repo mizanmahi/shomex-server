@@ -27,6 +27,7 @@ const run = async () => {
       const database = client.db('shomexDB');
       const serviceCollection = database.collection('services');
       const ordersCollection = database.collection('orders');
+      const newsLetterEmailCollection = database.collection('newsletterMails');
 
       //* APis
 
@@ -98,6 +99,15 @@ const run = async () => {
 
          res.json(result);
       });
+
+      app.post('/newsletter', async (req, res) => {
+         const emailInfo = req.body;
+         const result = await newsLetterEmailCollection.insertOne(emailInfo);
+
+         res.json(result);
+      });
+
+
    } catch (error) {
       console.log(error.message);
    } finally {
