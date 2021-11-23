@@ -83,6 +83,7 @@ const run = async () => {
          res.json(result);
       });
 
+      //@ PUT: Update a single service pending status
       app.put('/approve/:id', async (req, res) => {
          const { id } = req.params;
          const result = await ordersCollection.updateOne(
@@ -93,6 +94,7 @@ const run = async () => {
          res.json(result);
       });
 
+      //@ DELETE an order
       app.delete('/deleteOrder/:id', async (req, res) => {
          const { id } = req.params;
          const result = await ordersCollection.deleteOne({ _id: ObjectId(id) });
@@ -100,6 +102,7 @@ const run = async () => {
          res.json(result);
       });
 
+      //@ POST:  Save a newsletter subscriber mail
       app.post('/newsletter', async (req, res) => {
          const emailInfo = req.body;
          const result = await newsLetterEmailCollection.insertOne(emailInfo);
